@@ -1,0 +1,1 @@
+<span class="p-1 bg-gray-700 text-white rounded">{{ $code }}</span>

@@ -13,6 +13,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+$vimCommands = [
+    'global' => [],
+    'editing' => [],
+    'cursorMovement' => [],
+    'macros' => [],
+    'cutAndPaste' => [],
+    'indentText' => [],
+    'markingTextVisualMode' => [],
+    'exiting' => [],
+    'searchAndReplace' => [],
+    'registers' => [],
+    'insertMode' => [],
+];
+
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
+});
+
+Route::get('search', function () use ($vimCommands)  {
+    dd($vimCommands);
 });
