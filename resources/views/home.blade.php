@@ -8,7 +8,7 @@
         <link rel="stylesheet" href="{{ asset('css/app.css') }}">
         <link rel="icon" href="{{ asset('favicon.png') }}">
     </head>
-    <body x-data="{ focused: false, hasSearchResults: false, searchResultContent: [] }" x-on:keyup.slash="$refs.search.focus()" class="text-gray-800" style="background-color: #efef19;">
+    <body x-data="{ focused: false, hasSearchResults: false, searchResultContent: [], hash: window.location.hash }" x-on:keyup.slash="$refs.search.focus()" class="text-gray-800" style="background-color: #efef19;">
         <div class="w-full max-w-screen-xl mx-auto px-6">
             <header class="mb-8 p-2 sm:flex sm:justify-between sm:items-center">
                 <img class="w-64" src="{{ asset('logo.svg') }}">
@@ -19,10 +19,12 @@
                                 <svg viewBox="0 0 20 20" fill="currentColor" class="search w-6 h-6"><path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path></svg>
                             </div>
                         </div>
-                        <input x-ref="search" x-on:input.debounce="fetch(`/search/` + $refs.search.value).then(response => response.json()).then(data => { console.log(data); searchResultContent = data; hasSearchResults = data.length > 0; showSearchResults = true; })" x-on:keyup.escape="$refs.search.blur(); showSearchResults = false;" x-on:focus="focused = true" x-on:blur="focused = false" class="w-full py-3 pl-10 bg-pink-600 text-white sm:bg-transparent text-xl rounded-lg placeholder-current ease-in sm:text-pink-600 transition-all duration-100 focus:shadow-xl focus:text-white focus:pl-0 focus:bg-pink-600 focus:outline-none" placeholder="Search">
-                        <div x-ref="searchResults" x-show="hasSearchResults && showSearchResults" class="absolute bg-white shadow-xl rounded w-full h-56">
+                        <input x-ref="search" x-on:input.debounce="fetch(`/search/` + $refs.search.value).then(response => response.json()).then(data => { console.log(data); searchResultContent = data; hasSearchResults = data.length > 0 })" x-on:keyup.escape="$refs.search.blur(); showSearchResults = false;" x-on:focus="focused = true" x-on:blur="focused = false" class="w-full py-3 pl-10 bg-pink-600 text-white sm:bg-transparent text-xl rounded-lg placeholder-current ease-in sm:text-pink-600 transition-all duration-100 focus:shadow-xl focus:text-white focus:pl-0 focus:bg-pink-600 focus:outline-none" placeholder="Search">
+                        <div x-ref="searchResults" x-show.transition="hasSearchResults" class="absolute bg-pink-600 -mt-2 shadow-xl rounded w-full">
                             <template x-for="item in searchResultContent" :key="item.command">
-                                <div x-text="item.description"></div>
+                                <a x-bind:href="'#' + item.id">
+                                    <div class="p-2 block text-white hover:bg-white hover:text-pink-600 hover:shadow hover:rounded" x-text="item.command + '  ' + item.description"></div>
+                                </a>
                             </template>
                         </div>
                     </div>
@@ -32,15 +34,15 @@
                 <div class="hidden static inset-0 sm:block sm:w-1/5">
                     <nav>
                         @foreach ($vimCommands as $sections)
-                            <a href="#{{ $sections['section'] }}" class="block py-1 pl-2 rounded hover:bg-pink-600 hover:text-white">{{ $sections['section'] }}</a>
+                            <a href="/#{{ $sections['section'] }}" class="block py-1 pl-2 rounded hover:bg-pink-600 hover:text-white">{{ $sections['section'] }}</a>
                         @endforeach
                     </nav>
                 </div>
                 <div class="w-4/5 pl-8">
-                    @foreach ($vimCommands as $sections)
+                    @foreach ($vimCommands as $sectionIndex => $sections)
                         <h3 id="{{ $sections['section'] }}" class="text-2xl font-bold mt-8">{{ $sections['section'] }}</h3>
-                        @foreach ($sections['commands'] as $commands)
-                            <div class="mt-6">
+                        @foreach ($sections['commands'] as $commandIndex => $commands)
+                            <div id="{{$sectionIndex}}{{$commandIndex}}" class="rounded p-3">
                                 <x-code-snippet code="{{ $commands['command'] }}" /> - {{ $commands['description'] }}
                             </div>
                         @endforeach

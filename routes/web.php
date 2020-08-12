@@ -54,9 +54,10 @@ Route::get('search', function () {
 
 Route::get('search/{query}', function ($query) use ($vimCommands)  {
     $results = [];
-    foreach ($vimCommands as $section) {
-        foreach ($section['commands'] as $command) {
+    foreach ($vimCommands as $sectionIndex => $section) {
+        foreach ($section['commands'] as $commandIndex => $command) {
             if (Str::contains(Str::lower($command['description']), Str::lower($query))) {
+                $command['id'] = $sectionIndex . $commandIndex;
                 $results[] = $command;
             }
         }
