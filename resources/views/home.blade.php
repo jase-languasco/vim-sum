@@ -20,7 +20,7 @@
                             </div>
                         </div>
                         <input x-ref="search" x-on:input.debounce="fetch(`/search/` + $refs.search.value).then(response => response.json()).then(data => { console.log(data); searchResultContent = data; hasSearchResults = data.length > 0 })" x-on:keyup.escape="$refs.search.blur(); showSearchResults = false;" x-on:focus="focused = true" x-on:blur="focused = false" class="w-full py-3 pl-10 bg-pink-600 text-white sm:bg-transparent text-xl rounded-lg placeholder-current ease-in sm:text-pink-600 transition-all duration-100 focus:shadow-xl focus:text-white focus:pl-0 focus:bg-pink-600 focus:outline-none" placeholder="Search">
-                        <div x-ref="searchResults" x-show.transition="hasSearchResults" class="absolute bg-pink-600 -mt-2 shadow-xl rounded w-full">
+                        <div x-ref="searchResults" x-show.transition="hasSearchResults && focused" class="absolute bg-pink-600 -mt-2 shadow-xl rounded w-full">
                             <template x-for="item in searchResultContent" :key="item.command">
                                 <a x-bind:href="'#' + item.id">
                                     <div class="p-2 block text-white hover:bg-white hover:text-pink-600 hover:shadow hover:rounded" x-text="item.command + '  ' + item.description"></div>
