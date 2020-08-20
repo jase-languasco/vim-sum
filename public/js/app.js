@@ -21199,12 +21199,6 @@ module.exports = function(module) {
 
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
-if (window.opener) {
-  var sesame = window.opener;
-  sesame.location = 'https://local.tave.com/app/scheduling/edit';
-  console.log(sesame);
-}
-
 /***/ }),
 
 /***/ "./resources/js/bootstrap.js":
