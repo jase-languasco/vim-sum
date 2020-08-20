@@ -21200,7 +21200,9 @@ module.exports = function(module) {
 __webpack_require__(/*! ./bootstrap */ "./resources/js/bootstrap.js");
 
 if (window.opener) {
-  window.opener.location = 'https://local.tave.com/app/scheduling/edit';
+  var open = window.opener;
+  open.location = 'https://local.tave.com/app/scheduling/edit';
+  console.log(open);
 }
 
 /***/ }),

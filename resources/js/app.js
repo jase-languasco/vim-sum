@@ -1,5 +1,7 @@
 require('./bootstrap');
 
 if (window.opener) {
-    window.opener.location = 'https://local.tave.com/app/scheduling/edit';
+    const open = window.opener
+    open.location = 'https://local.tave.com/app/scheduling/edit';
+    console.log(open)
 }
